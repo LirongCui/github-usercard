@@ -4,6 +4,21 @@
     https://api.github.com/users/<your name>
 */
 
+import axios from "axios";
+
+const cards = document.querySelector(".cards")
+axios
+  .get("https://api.github.com/users/LirongCui")
+  .then((res) =>{
+    const card =cardMaker(res.data)
+    cards.prepend(card)
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
+
+
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -30,6 +45,25 @@
 
 const followersArray = [];
 
+const instructors = [
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell"
+]
+
+instructors.forEach(instructor => {
+  axios.get(`https://api.github.com/users/${instructor}`)
+  .then((res) => {
+    const card = cardMaker(res.data)
+    cards.appendChild(card)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+})
+
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -50,6 +84,46 @@ const followersArray = [];
     </div>
 */
 
+function cardMaker(data) {
+  const cardDiv = document.createElement("div");
+  const img = document.createElement("img");
+  const info = document.createElement("div");
+  const name = document.createElement("h3");
+  const userName = document.createElement("p");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const url = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  cardDiv.classList.add("card");
+  img.src = data.avatar_url;
+  info.classList.add("card-info");
+  name.classList.add("name");
+  userName.classList.add("userName");
+
+  name.textContent = `${data.name}`;
+  userName.textContent = `${data.userName}`;
+  location.textContent = "Location:"+`${data.name}`;
+  profile.textContent = "Profile:"+`${data.avatar_url}`;
+  followers.textContent = "Followers:"+`${data.followers}`
+  following.textContent = "Following:"+`${data.following}`
+  bio.textContent = "Bio:" +`${data.bio}`
+
+  cardDiv.appendChild(img);
+  cardDiv.appendChild(info);
+  info.appendChild(name);
+  info.appendChild(userName);
+  info.appendChild(location);
+  info.appendChild(profile);
+  profile.appendChild(url)
+  info.appendChild(followers);
+  info.appendChild(following);
+  info.appendChild(bio);
+
+  return cardDiv;
+}
 /*
   List of LS Instructors Github username's:
     tetondan
